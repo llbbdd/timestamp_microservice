@@ -42,7 +42,7 @@ function isNaturalTime(naturalTime){
 }
 
 function naturalFromUnixTime(unixTime){
-    return moment().format('LL');
+    return moment.unix(unixTime).format('LL');
 }
 
 function unixFromNaturalTime(naturalTime){
