@@ -1,4 +1,5 @@
 var express = require('express');
+var moment = require('moment');
 
 var port = 8080;
 
@@ -29,11 +30,11 @@ app.get('/:query', function(req, res) {
 });
 
 app.listen(port, function () {
-  console.log('Timestamp Microservice app listening on port ' + port);
+    console.log('Timestamp Microservice app listening on port ' + port);
 });
 
 function isUnixTime(unixTime){
-    return false;
+    return !isNaN(parseFloat(unixTime)) && isFinite(unixTime);
 }
 
 function isNaturalTime(naturalTime){
@@ -41,11 +42,9 @@ function isNaturalTime(naturalTime){
 }
 
 function naturalFromUnixTime(unixTime){
-    
+    return moment().format('LL');
 }
 
 function unixFromNaturalTime(naturalTime){
     
 }
-
-// { "unix": 1450137600, "natural": "December 15, 2015" }
