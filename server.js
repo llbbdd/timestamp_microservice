@@ -1,11 +1,51 @@
 var express = require('express');
 
-var app = express()
+var port = 8080;
 
-app.get('/', function (req, res) {
-  res.send('Hello World!')
-})
+var app = express();
 
-app.listen(8080, function () {
-  console.log('Example app listening on port 3000!')
-})
+app.get('/:query', function(req, res) {
+    var time = req.params.query;
+    
+    if(isUnixTime(time)){
+        var naturalTime = naturalFromUnixTime(time);
+        
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({ "unix": time, "natural": naturalTime }));
+    }
+    else if(isNaturalTime(time)){
+        var unixTime = unixFromNaturalTime(time);
+        
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({ "unix": unixTime, "natural": time }));
+    }
+    else{
+        var errorMessage = "Parameter passed is neither unix nor natural timestamp";
+        console.log(errorMessage);
+        new Error(errorMessage);
+    }
+    
+    console.log(time);
+});
+
+app.listen(port, function () {
+  console.log('Timestamp Microservice app listening on port ' + port);
+});
+
+function isUnixTime(unixTime){
+    return false;
+}
+
+function isNaturalTime(naturalTime){
+    return false
+}
+
+function naturalFromUnixTime(unixTime){
+    
+}
+
+function unixFromNaturalTime(naturalTime){
+    
+}
+
+// { "unix": 1450137600, "natural": "December 15, 2015" }
