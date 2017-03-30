@@ -5,28 +5,24 @@ var port = 8080;
 
 var app = express();
 
-app.get('/:query', function(req, res) {
+app.get('/:query', function(req, res, next) {
     var time = req.params.query;
+    
+    res.setHeader('Content-Type', 'application/json');
     
     if(isUnixTime(time)){
         var naturalTime = naturalFromUnixTime(time);
         
-        res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify({ "unix": time, "natural": naturalTime }));
     }
     else if(isNaturalTime(time)){
         var unixTime = unixFromNaturalTime(time);
         
-        res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify({ "unix": unixTime, "natural": time }));
     }
     else{
-        var errorMessage = "Parameter passed is neither unix nor natural timestamp";
-        console.log(errorMessage);
-        new Error(errorMessage);
+        res.send(JSON.stringify({ "unix": null, "natural": null }));
     }
-    
-    console.log(time);
 });
 
 app.listen(port, function () {
@@ -38,7 +34,7 @@ function isUnixTime(unixTime){
 }
 
 function isNaturalTime(naturalTime){
-    return false
+    return moment(naturalTime).isValid();
 }
 
 function naturalFromUnixTime(unixTime){
@@ -46,5 +42,5 @@ function naturalFromUnixTime(unixTime){
 }
 
 function unixFromNaturalTime(naturalTime){
-    
+    return moment(naturalTime).format("X");
 }
