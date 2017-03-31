@@ -11,17 +11,13 @@ app.get('/:query', function(req, res, next) {
     res.setHeader('Content-Type', 'application/json');
     
     if(isUnixTime(time)){
-        var naturalTime = naturalFromUnixTime(time);
-        
-        res.send(JSON.stringify({ "unix": time, "natural": naturalTime }));
+        sendResponse(res, time, naturalFromUnixTime(time))
     }
     else if(isNaturalTime(time)){
-        var unixTime = unixFromNaturalTime(time);
-        
-        res.send(JSON.stringify({ "unix": unixTime, "natural": time }));
+        sendResponse(res, unixFromNaturalTime(time), time);
     }
     else{
-        res.send(JSON.stringify({ "unix": null, "natural": null }));
+        sendResponse(res, null, null);
     }
 });
 
@@ -43,4 +39,8 @@ function naturalFromUnixTime(unixTime){
 
 function unixFromNaturalTime(naturalTime){
     return moment(naturalTime).format("X");
+}
+
+function sendResponse(response, unixTime, naturalTime){
+    response.send(JSON.stringify({ "unix": unixTime, "natural": naturalTime }));
 }
