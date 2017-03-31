@@ -5,7 +5,7 @@ var port = 8080;
 
 var app = express();
 
-app.get('/:query', function(req, res, next) {
+app.get('/:query', function(req, res) {
     var time = req.params.query;
     
     res.setHeader('Content-Type', 'application/json');
